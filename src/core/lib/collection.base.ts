@@ -53,8 +53,8 @@ export abstract class CollectionBase<
     this.#adapter = new adapter(...elements) as unknown as A;
   }
 
-  public add(element: E): this {
-    return this.#adapter.add(element), this;
+  public add(...element: E[]): this {
+    return element.forEach(e => this.#adapter.add(e)), this;
   }
   public clear(): this {
     return this.#adapter.clear(), this;
@@ -67,8 +67,8 @@ export abstract class CollectionBase<
       this.#adapter = null as any,
       this;
   }
-  public delete(element: E): boolean {
-    return this.#adapter.delete(element);
+  public delete(...element: E[]): boolean {
+    return element.every(e => this.#adapter.delete(e));
   }
   public forEach(callbackfn: (element: E, element2: E, collection: CollectionCore<E, T>) => void, thisArg?: any): this {
     return this.#adapter.forEach(callbackfn as any, thisArg), this;
