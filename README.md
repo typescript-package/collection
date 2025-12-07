@@ -63,7 +63,7 @@ The base functionality abstraction for collections.
 import { CollectionBase } from '@typescript-package/collection';
 ```
 
-[`CollectionBase`](https://github.com/typescript-package/hooks/blob/main/src/core/lib/collection.base.ts)
+[`CollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.base.ts)
 
 ### `CollectionCore`
 
@@ -73,7 +73,7 @@ The core abstract class for `Type` collections of elements `Element` type.
 import { CollectionCore } from '@typescript-package/collection';
 ```
 
-[`CollectionCore`](https://github.com/typescript-package/hooks/blob/main/src/core/lib/collection.core.ts)
+[`CollectionCore`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.core.ts)
 
 ### Adapters
 
@@ -85,7 +85,7 @@ The Set collection adapter.
 import { SetAdapter } from '@typescript-package/collection';
 ```
 
-[`SetAdapter`](https://github.com/typescript-package/hooks/blob/main/src/adapter/lib/set.adapter.ts)
+[`SetAdapter`](https://github.com/typescript-package/collection/blob/main/src/adapter/lib/set.adapter.ts)
 
 ### Concrete
 
@@ -106,7 +106,7 @@ collection.delete(29, 31);
 console.log(`size: `, collection.size); // Output: 5
 ```
 
-[`Collection`](https://github.com/typescript-package/hooks/blob/main/src/lib/collection.ts)
+[`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.class.ts)
 
 ## Contributing
 
