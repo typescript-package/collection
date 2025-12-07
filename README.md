@@ -2,7 +2,7 @@
   <img
     src="https://raw.githubusercontent.com/typescript-package/core/refs/heads/main/ts-package-barcode-logo-512.png"
     width="20%"
-    title="@typescript-package/collection"
+    title="@typescript-package/collection - A lightweight TypeScript library for data collection."
   />
 </a>
 
@@ -53,7 +53,7 @@ import {
 } from '@typescript-package/collection';
 ```
 
-## Abstract
+### Abstract
 
 ### `CollectionBase`
 
@@ -75,7 +75,7 @@ import { CollectionCore } from '@typescript-package/collection';
 
 [`CollectionCore`](https://github.com/typescript-package/hooks/blob/main/src/core/lib/collection.core.ts)
 
-## Adapters
+### Adapters
 
 ### `SetAdapter`
 
@@ -87,14 +87,23 @@ import { SetAdapter } from '@typescript-package/collection';
 
 [`SetAdapter`](https://github.com/typescript-package/hooks/blob/main/src/adapter/lib/set.adapter.ts)
 
-## Concrete
+### Concrete
 
 ### `Collection`
 
 The collection concrete class with adapter support.
 
 ```typescript
-import { Collection } from '@typescript-package/collection';
+import { Collection, SetAdapter } from '@typescript-package/collection';
+
+const collection = new Collection(SetAdapter, 1, 2, 3);
+
+// Adds.
+collection.add(27, 29, 31, 33);
+// Deletes.
+collection.delete(29, 31);
+
+console.log(`size: `, collection.size); // Output: 5
 ```
 
 [`Collection`](https://github.com/typescript-package/hooks/blob/main/src/lib/collection.ts)
