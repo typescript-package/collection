@@ -8,6 +8,10 @@ collection.add(27, 29, 31, 33);
 // Deletes.
 collection.delete(29, 31);
 
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
 console.log(`size: `, collection.size); // Output: 5
 
 describe("Collection SetAdapter", () => {

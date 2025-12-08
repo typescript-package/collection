@@ -1,25 +1,58 @@
 // Interface.
-import { CollectionShape } from '@typedly/collection';
+import { CollectionAdapter, CollectionShape } from '@typedly/collection';
 /**
  * @description The core abstract class for `Type` collections of elements `Element` type.
  * @export
  * @abstract
  * @class CollectionCore
- * @template Element type in collection.
- * @template Type of the collection.
- * @implements {CollectionShape<Element, Type>}
+ * @template E type in collection.
+ * @template T of the collection.
+ * @template {CollectionAdapter<E, T>} A Adapter type.
+ * @implements {CollectionShape<E, T>}
  */
-export abstract class CollectionCore<Element, Type> implements CollectionShape<Element, Type> {
-  abstract get [Symbol.toStringTag](): string;
-  abstract get [Symbol.iterator](): Iterator<Element>;
-  abstract value: Type;
-  abstract add(...element: Element[]): this;
-  abstract clear(): this;
-  abstract delete(...element: Element[]): boolean;
-  abstract destroy(): this;
-  abstract forEach(callbackfn: (element: Element, element2: Element, collection: CollectionShape<Element, Type>) => void, thisArg?: any): void;
-  abstract has(element: Element): boolean;
-  abstract lock(): this;
-  abstract set(value: Type): this;
-  abstract readonly size: number;
+export abstract class CollectionCore<
+  E,
+  T,
+  A extends CollectionAdapter<E, T>
+> implements CollectionShape<E, T> {
+  get [Symbol.toStringTag](): string {
+    return 'Collection';
+  }
+
+  [Symbol.iterator](): Iterator<E> {
+    return this.adapter[Symbol.iterator]();
+  }
+
+  protected abstract get adapter(): A
+
+  public get size(): number {
+    return this.adapter.size;
+  }
+  public get value(): T {
+    return this.adapter.value;
+  }
+  public add(...element: E[]): this {
+    return this.adapter.add(...element), this;
+  }
+  public clear(): this {
+    return this.adapter.clear(), this;
+  }
+  public delete(...element: E[]): boolean {
+    return this.adapter.delete(...element);
+  }
+  public destroy(): this {
+    return this.adapter.destroy?.(), this;
+  }
+  public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T>) => void, thisArg?: any): void {
+    return this.adapter.forEach(callbackfn as any, thisArg);
+  }
+  public has(...element: E[]): boolean {
+    return this.adapter.has(...element);
+  }
+  public lock(): this {
+    return this.adapter.lock?.(), this;
+  }
+  public set(value: T): this {
+    return this.adapter.set(value), this;
+  }
 }
