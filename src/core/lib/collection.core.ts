@@ -1,5 +1,9 @@
+// Abstract.
+import { BaseData } from '@typescript-package/data';
 // Interface.
 import { CollectionAdapter, CollectionShape } from '@typedly/collection';
+// Type.
+import { AsyncReturn } from '@typedly/data';
 /**
  * @description The core abstract class for `Type` collections of elements `Element` type.
  * @export
@@ -10,49 +14,53 @@ import { CollectionAdapter, CollectionShape } from '@typedly/collection';
  * @template {CollectionAdapter<E, T>} A Adapter type.
  * @implements {CollectionShape<E, T>}
  */
-export abstract class CollectionCore<
+export abstract class CollectionBase<
   E,
   T,
-  A extends CollectionAdapter<E, T>
-> implements CollectionShape<E, T> {
-  get [Symbol.toStringTag](): string {
+  R extends boolean,
+  A extends CollectionAdapter<E, T, R>
+> extends BaseData<T, R, A>
+  implements CollectionShape<E, T, R> {
+  override get [Symbol.toStringTag](): string {
     return 'Collection';
   }
-
-  [Symbol.iterator](): Iterator<E> {
-    return this.adapter[Symbol.iterator]();
+  override get adapter(): A {
+    return super.adapter as A;
   }
-
-  protected abstract get adapter(): A
-
   public get size(): number {
     return this.adapter.size;
   }
-  public get value(): T {
-    return this.adapter.value;
+  constructor(
+    adapter: {new (...args: unknown[]): A},
+    ...args: unknown[]
+  ) {
+    super(undefined as T, adapter, ...args);
   }
-  public add(...element: E[]): this {
-    return this.adapter.add(...element), this;
+  public add(...element: E[]): AsyncReturn<R, this> {
+    const result = this.adapter.add(...element);
+    return (result instanceof Promise
+      ? result.then(() => this)
+      : this) as AsyncReturn<R, this>;
   }
-  public clear(): this {
-    return this.adapter.clear(), this;
+  public delete(...element: E[]): AsyncReturn<R, boolean> {
+    const result = this.adapter.delete(...element);
+    return (result instanceof Promise
+      ? result.then(res => res)
+      : result) as AsyncReturn<R, boolean>;
   }
-  public delete(...element: E[]): boolean {
-    return this.adapter.delete(...element);
+  public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T, R>) => void, thisArg?: any): AsyncReturn<R, this> {
+    const result = this.adapter.forEach(callbackfn as any, thisArg);
+    return (result instanceof Promise
+      ? result.then(() => this)
+      : this) as AsyncReturn<R, this>;
   }
-  public destroy(): this {
-    return this.adapter.destroy?.(), this;
+  public has(...element: E[]): AsyncReturn<R, boolean> {
+    const result = this.adapter.has(...element);
+    return (result instanceof Promise
+      ? result.then(res => res)
+      : result) as AsyncReturn<R, boolean>;
   }
-  public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T>) => void, thisArg?: any): void {
-    return this.adapter.forEach(callbackfn as any, thisArg);
-  }
-  public has(...element: E[]): boolean {
-    return this.adapter.has(...element);
-  }
-  public lock(): this {
+  public override lock(): this {
     return this.adapter.lock?.(), this;
-  }
-  public set(value: T): this {
-    return this.adapter.set(value), this;
   }
 }
