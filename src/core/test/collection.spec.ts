@@ -3,8 +3,6 @@ import { SetAdapter } from "@typescript-package/collection-adapter";
 
 const collection = new Collection(false, SetAdapter, 1, 2, 3);
 
-// collection.
-
 // Adds.
 collection.add(27, 29, 31, 33);
 // Deletes.
