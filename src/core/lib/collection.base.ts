@@ -1,45 +1,67 @@
 // Abstract.
-import { CollectionCore } from './collection.core';
+import { BaseData } from '@typescript-package/data';
 // Interface.
-import { CollectionAdapter } from '@typedly/collection';
+import { CollectionAdapter, CollectionShape } from '@typedly/collection';
+// Type.
+import { AsyncReturn } from '@typedly/data';
 /**
- * @description The base functionality abstraction for collections.
+ * @description The core abstract class for `Type` collections of elements `Element` type.
  * @export
  * @abstract
- * @class CollectionBase
- * @template E Element type in collection.
- * @template T Type of the collection.
- * @template {CollectionAdapter<E, T>} A Type of the adapter.
- * @extends {CollectionCore<E, T>}
+ * @class CollectionCore
+ * @template E type in collection.
+ * @template T of the collection.
+ * @template {CollectionAdapter<E, T>} A Adapter type.
+ * @implements {CollectionShape<E, T>}
  */
 export abstract class CollectionBase<
   E,
   T,
-  A extends CollectionAdapter<E, T>
-> extends CollectionCore<E, T, A> {
-  /**
-   * @description The protected getter and setter for the adapter.
-   * @protected
-   * @type {A}
-   */
-  public get adapter() {
-    return this.#adapter;
+  R extends boolean,
+  A extends CollectionAdapter<E, T, R>
+> extends BaseData<T, R, A>
+  implements CollectionShape<E, T, R> {
+  override get [Symbol.toStringTag](): string {
+    return 'Collection';
   }
-
-  #adapter: A;
-
+  override get adapter(): A {
+    return super.adapter as A;
+  }
+  public get size(): number {
+    return this.adapter.size;
+  }
   constructor(
-    adapter: new (...elements: E[]) => A,
-    ...elements: E[]
+    async: R,
+    adapter: {new (...args: unknown[]): A},
+    ...args: unknown[]
   ) {
-    super();
-    this.#adapter = new adapter(...elements) as unknown as A;
+    super(undefined as T, adapter, ...args);
   }
-
-  public override destroy(): this {
-    return super.clear(),
-      super.destroy(),
-      this.#adapter = null as any,
-      this;
+  public add(...element: E[]): AsyncReturn<R, this> {
+    const result = this.adapter.add(...element);
+    return (result instanceof Promise
+      ? result.then(() => this)
+      : this) as AsyncReturn<R, this>;
+  }
+  public delete(...element: E[]): AsyncReturn<R, boolean> {
+    const result = this.adapter.delete(...element);
+    return (result instanceof Promise
+      ? result.then(res => res)
+      : result) as AsyncReturn<R, boolean>;
+  }
+  public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T, R>) => void, thisArg?: any): AsyncReturn<R, this> {
+    const result = this.adapter.forEach(callbackfn as any, thisArg);
+    return (result instanceof Promise
+      ? result.then(() => this)
+      : this) as AsyncReturn<R, this>;
+  }
+  public has(...element: E[]): AsyncReturn<R, boolean> {
+    const result = this.adapter.has(...element);
+    return (result instanceof Promise
+      ? result.then(res => res)
+      : result) as AsyncReturn<R, boolean>;
+  }
+  public override lock(): this {
+    return this.adapter.lock?.(), this;
   }
 }

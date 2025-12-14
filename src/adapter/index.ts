@@ -1,1 +1,0 @@
-export { SetAdapter } from './lib';
