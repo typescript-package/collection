@@ -3,7 +3,7 @@ import { BaseData } from '@typescript-package/data';
 // Interface.
 import { CollectionAdapter, CollectionShape } from '@typedly/collection';
 // Type.
-import { AsyncReturn } from '@typedly/data';
+import { AsyncReturn, IterValue } from '@typedly/data';
 /**
  * @description The core abstract class for `Type` collections of elements `Element` type.
  * @export
@@ -63,5 +63,8 @@ export abstract class CollectionBase<
   }
   public override lock(): this {
     return this.adapter.lock?.(), this;
+  }
+  override *[Symbol.iterator](): IterableIterator<E extends IterValue<T> ? E : IterValue<T>> {
+    return this.adapter[Symbol.iterator]?.();
   }
 }
