@@ -31,6 +31,7 @@ export abstract class CollectionBase<
     return this.adapter.size;
   }
   constructor(
+    async: R,
     adapter: {new (...args: unknown[]): A},
     ...args: unknown[]
   ) {
