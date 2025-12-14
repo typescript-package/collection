@@ -59,28 +59,6 @@ import { CollectionBase } from '@typescript-package/collection';
 
 [`CollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.base.ts)
 
-### `CollectionCore`
-
-The core abstract class for `Type` collections of elements `Element` type.
-
-```typescript
-import { CollectionCore } from '@typescript-package/collection';
-```
-
-[`CollectionCore`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.core.ts)
-
-### Adapters
-
-### `SetAdapter`
-
-The Set collection adapter.
-
-```typescript
-import { SetAdapter } from '@typescript-package/collection';
-```
-
-[`SetAdapter`](https://github.com/typescript-package/collection/blob/main/src/adapter/lib/set.adapter.ts)
-
 ### Concrete
 
 ### `Collection`
@@ -88,9 +66,10 @@ import { SetAdapter } from '@typescript-package/collection';
 The collection concrete class with adapter support.
 
 ```typescript
-import { Collection, SetAdapter } from '@typescript-package/collection';
+import { SetAdapter } from '@typescript-package/collection-adapter';
+import { Collection } from '@typescript-package/collection';
 
-const collection = new Collection(SetAdapter, 1, 2, 3);
+const collection = new Collection(false, SetAdapter, 1, 2, 3);
 
 // Adds.
 collection.add(27, 29, 31, 33);
