@@ -1,2 +1,2 @@
 // Abstract.
-export { CollectionBase } from './collection.core';
+export { CollectionBase } from './collection.base';
