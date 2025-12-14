@@ -14,7 +14,7 @@ import { CollectionAdapter } from '@typedly/collection';
 export class Collection<
   E,
   R extends boolean,
-  A extends new (...elements: E[]) => CollectionAdapter<E, any, R> 
+  A extends new (...elements: E[]) => CollectionAdapter<E, any, R>
 > extends CollectionBase<
   E,
   A extends new (...args: E[]) => CollectionAdapter<E, infer T, R> ? T : never,
