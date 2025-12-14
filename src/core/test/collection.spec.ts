@@ -1,7 +1,9 @@
-import { SetAdapter } from "../adapter";
-import { Collection } from "../lib";
+import { Collection } from "../../lib";
+import { SetAdapter } from "@typescript-package/collection-adapter";
 
-const collection = new Collection(SetAdapter, 1, 2, 3);
+const collection = new Collection(false, SetAdapter, 1, 2, 3);
+
+// collection.
 
 // Adds.
 collection.add(27, 29, 31, 33);
