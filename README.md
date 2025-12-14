@@ -21,9 +21,6 @@ A **lightweight** TypeScript package for data collection.
 - [Api](#api)
   - **Abstract**
     - [`CollectionBase`](#collectionbase)
-    - [`CollectionCore`](#collectioncore)
-  - **Adapters**
-    - [`SetAdapter`](#setadapter)
   - **Concrete**
     - [`Collection`](#collection)
 - [Contributing](#contributing)
@@ -44,12 +41,9 @@ npm install @typescript-package/collection --save-peer
 ```typescript
 import {
   // Abstract.
-  CollectionCore,
   CollectionBase,
   // Concrete.
   Collection,
-  // Adapters.
-  SetAdapter
 } from '@typescript-package/collection';
 ```
 
