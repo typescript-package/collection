@@ -11,8 +11,9 @@ import { AsyncReturn, IterValue } from '@typedly/data';
  * @class CollectionBase
  * @template E type in collection.
  * @template T of the collection.
- * @template {CollectionAdapter<E, T>} A Adapter type.
- * @implements {CollectionShape<E, T>}
+ * @template R boolean indicating async (true) or sync (false) behavior.
+ * @template {CollectionAdapter<E, T, R>} A Adapter type.
+ * @implements {CollectionShape<E, T, R>}
  */
 export abstract class CollectionBase<
   E,
