@@ -8,7 +8,7 @@ import { AsyncReturn, IterValue } from '@typedly/data';
  * @description The core abstract class for `Type` collections of elements `Element` type.
  * @export
  * @abstract
- * @class CollectionCore
+ * @class CollectionBase
  * @template E type in collection.
  * @template T of the collection.
  * @template {CollectionAdapter<E, T>} A Adapter type.
