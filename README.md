@@ -69,14 +69,27 @@ The collection concrete class with adapter support.
 import { SetAdapter } from '@typescript-package/collection-adapter';
 import { Collection } from '@typescript-package/collection';
 
-const collection = new Collection(false, SetAdapter, 1, 2, 3);
+// Initialize 
+const collection = new Collection({
+    async: false,
+    // Capture the `T` type.
+    value: new Set([3,'a']),
+  },
+  SetAdapter,
+  1, 2, '3' as string | number
+);
 
 // Adds.
-collection.add(27, 29, 31, 33);
+collection.add(27, 29, 31);
 // Deletes.
-collection.delete(29, 31);
+collection.delete(29, 31, 22);
 
-console.log(`size: `, collection.size); // Output: 5
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
+console.log(`size: `, collection.size); // Output: 4
+
 ```
 
 [`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.class.ts)
