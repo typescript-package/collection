@@ -64,6 +64,6 @@ export abstract class CollectionBase<
     return this.adapter.lock?.(), this;
   }
   override *[Symbol.iterator](): IterableIterator<E extends IterValue<T> ? E : IterValue<T>> {
-    return this.adapter[Symbol.iterator]?.();
+    yield* this.adapter[Symbol.iterator]?.() as any;
   }
 }
