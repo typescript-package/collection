@@ -1,6 +1,6 @@
 {
   "name": "@typescript-package/collection",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "wwwdev.io <dev@wwwdev.io>",
   "description": "A lightweight TypeScript library for data collection.",
   "license": "MIT",
@@ -9,7 +9,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "peerDependencies": {
-    "@typedly/collection": "^2.0.0"
+    "@typedly/collection": "^3.0.0",
+    "@typescript-package/data": "^7.0.0"
   },
   "scripts": {
     "prepublishOnly": "npm run pkg && npm run clean",
@@ -27,7 +28,7 @@
     "@typescript-package",
     "@typescript-package/collection",
     "CollectionBase",
-    "CollectionCore"
+    "Collection"
   ],
   "funding": [
     {

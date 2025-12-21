@@ -21,9 +21,6 @@ A **lightweight** TypeScript package for data collection.
 - [Api](#api)
   - **Abstract**
     - [`CollectionBase`](#collectionbase)
-    - [`CollectionCore`](#collectioncore)
-  - **Adapters**
-    - [`SetAdapter`](#setadapter)
   - **Concrete**
     - [`Collection`](#collection)
 - [Contributing](#contributing)
@@ -44,12 +41,9 @@ npm install @typescript-package/collection --save-peer
 ```typescript
 import {
   // Abstract.
-  CollectionCore,
   CollectionBase,
   // Concrete.
   Collection,
-  // Adapters.
-  SetAdapter
 } from '@typescript-package/collection';
 ```
 
@@ -65,28 +59,6 @@ import { CollectionBase } from '@typescript-package/collection';
 
 [`CollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.base.ts)
 
-### `CollectionCore`
-
-The core abstract class for `Type` collections of elements `Element` type.
-
-```typescript
-import { CollectionCore } from '@typescript-package/collection';
-```
-
-[`CollectionCore`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.core.ts)
-
-### Adapters
-
-### `SetAdapter`
-
-The Set collection adapter.
-
-```typescript
-import { SetAdapter } from '@typescript-package/collection';
-```
-
-[`SetAdapter`](https://github.com/typescript-package/collection/blob/main/src/adapter/lib/set.adapter.ts)
-
 ### Concrete
 
 ### `Collection`
@@ -94,16 +66,30 @@ import { SetAdapter } from '@typescript-package/collection';
 The collection concrete class with adapter support.
 
 ```typescript
-import { Collection, SetAdapter } from '@typescript-package/collection';
+import { SetAdapter } from '@typescript-package/collection-adapter';
+import { Collection } from '@typescript-package/collection';
 
-const collection = new Collection(SetAdapter, 1, 2, 3);
+// Initialize 
+const collection = new Collection({
+    async: false,
+    // Capture the `T` type.
+    value: new Set([3,'a']),
+  },
+  SetAdapter,
+  1, 2, '3' as string | number
+);
 
 // Adds.
-collection.add(27, 29, 31, 33);
+collection.add(27, 29, 31);
 // Deletes.
-collection.delete(29, 31);
+collection.delete(29, 31, 22);
 
-console.log(`size: `, collection.size); // Output: 5
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
+console.log(`size: `, collection.size); // Output: 4
+
 ```
 
 [`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.class.ts)
