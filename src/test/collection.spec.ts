@@ -1,12 +1,15 @@
-import { Collection } from "../../lib";
-import { SetAdapter } from "@typescript-package/collection-adapter";
+import { Collection } from "../lib";
+import { SetAdapter } from '@typescript-package/collection-adapter';
 
-const collection = new Collection(false, SetAdapter, 1, 2, 3);
+const collection = new Collection({
+  async: false,
+  value: new Set([3,'a']),
+}, SetAdapter, 1, 2, 'a', 'b' as string | number);
 
 // Adds.
-collection.add(27, 29, 31, 33);
+collection.add(27, 29, 31);
 // Deletes.
-collection.delete(29, 31);
+collection.delete(29, 31, 22);
 
 for (const element of collection) {
   console.log(`element: `, element);
