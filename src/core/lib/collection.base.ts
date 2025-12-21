@@ -1,5 +1,5 @@
 // Abstract.
-import { BaseData } from '@typescript-package/data';
+import { AdapterData } from '@typescript-package/data';
 // Interface.
 import { CollectionAdapter, CollectionShape } from '@typedly/collection';
 // Type.
@@ -11,7 +11,7 @@ import { AsyncReturn, IterValue } from '@typedly/data';
  * @class CollectionBase
  * @template E type in collection.
  * @template T of the collection.
- * @template R boolean indicating async (true) or sync (false) behavior.
+ * @template {boolean} R boolean indicating async (true) or sync (false) behavior.
  * @template {CollectionAdapter<E, T, R>} A Adapter type.
  * @implements {CollectionShape<E, T, R>}
  */
@@ -20,7 +20,7 @@ export abstract class CollectionBase<
   T,
   R extends boolean,
   A extends CollectionAdapter<E, T, R>
-> extends BaseData<T, R, A>
+> extends AdapterData<T, E[], R, A>
   implements CollectionShape<E, T, R> {
   override get [Symbol.toStringTag](): string {
     return 'Collection';
@@ -33,10 +33,14 @@ export abstract class CollectionBase<
   }
   constructor(
     async: R,
-    adapter: {new (...args: unknown[]): A},
-    ...args: unknown[]
+    adapter: {new (...elements: E[]): A},
+    ...elements: E[]
   ) {
-    super(undefined as T, adapter, ...args);
+    super(
+      async,
+      adapter,
+      ...elements
+    );
   }
   public add(...element: E[]): AsyncReturn<R, this> {
     const result = this.adapter.add(...element);
@@ -45,10 +49,7 @@ export abstract class CollectionBase<
       : this) as AsyncReturn<R, this>;
   }
   public delete(...element: E[]): AsyncReturn<R, boolean> {
-    const result = this.adapter.delete(...element);
-    return (result instanceof Promise
-      ? result.then(res => res)
-      : result) as AsyncReturn<R, boolean>;
+    return this.adapter.delete(...element);
   }
   public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T, R>) => void, thisArg?: any): AsyncReturn<R, this> {
     const result = this.adapter.forEach(callbackfn as any, thisArg);
@@ -57,10 +58,7 @@ export abstract class CollectionBase<
       : this) as AsyncReturn<R, this>;
   }
   public has(...element: E[]): AsyncReturn<R, boolean> {
-    const result = this.adapter.has(...element);
-    return (result instanceof Promise
-      ? result.then(res => res)
-      : result) as AsyncReturn<R, boolean>;
+    return this.adapter.has(...element);
   }
   public override lock(): this {
     return this.adapter.lock?.(), this;
