@@ -28,7 +28,7 @@
     "@typescript-package",
     "@typescript-package/collection",
     "CollectionBase",
-    "CollectionCore"
+    "Collection"
   ],
   "funding": [
     {
