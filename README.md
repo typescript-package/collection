@@ -57,6 +57,18 @@ The base functionality abstraction for collections.
 import { CollectionBase } from '@typescript-package/collection';
 ```
 
+#### Return types for collection methods
+
+| Method      | Returns `this` for chaining? | Uses `asyncReturn` helper? | Returns adapter result? |
+|-------------|:---------------------------:|:-------------------------:|:----------------------:|
+| `add`       |       ✓                     |        ✓                  |         ✗              |
+| `forEach`   |       ✓                     |        ✓                  |         ✗              |
+| `delete`    |       ✗                     |        ✓                  |         ✓              |
+| `has`       |       ✗                     |        ✓                  |         ✓              |
+| `lock`      |       ✓                     |        ✗                  |         ✗              |
+
+All methods that can be asynchronous make use of the `asyncReturn` helper, which adapts return types to be synchronous (`this`) or asynchronous (`Promise<this>`) depending on the collection's mode (`R`).
+
 [`CollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.base.ts)
 
 ### Concrete

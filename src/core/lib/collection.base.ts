@@ -43,25 +43,24 @@ export abstract class CollectionBase<
     );
   }
   public add(...element: E[]): AsyncReturn<R, this> {
-    const result = this.adapter.add(...element);
-    return (result instanceof Promise
-      ? result.then(() => this)
-      : this) as AsyncReturn<R, this>;
+    return this.asyncReturn(this.adapter.add(...element));
   }
   public delete(...element: E[]): AsyncReturn<R, boolean> {
     return this.adapter.delete(...element);
   }
   public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T, R>) => void, thisArg?: any): AsyncReturn<R, this> {
-    const result = this.adapter.forEach(callbackfn as any, thisArg);
-    return (result instanceof Promise
-      ? result.then(() => this)
-      : this) as AsyncReturn<R, this>;
+    return this.asyncReturn(this.adapter.forEach(callbackfn as any, thisArg));
   }
   public has(...element: E[]): AsyncReturn<R, boolean> {
     return this.adapter.has(...element);
   }
   public override lock(): this {
     return this.adapter.lock?.(), this;
+  }
+  protected asyncReturn(result: any): AsyncReturn<R, this> {
+    return (result instanceof Promise
+      ? result.then(() => this)
+      : this) as AsyncReturn<R, this>;
   }
   override *[Symbol.iterator](): IterableIterator<E extends IterValue<T> ? E : IterValue<T>> {
     yield* this.adapter[Symbol.iterator]?.() as any;
