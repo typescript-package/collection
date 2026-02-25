@@ -1,7 +1,7 @@
 // Abstract.
 import { AdapterData } from '@typescript-package/data';
 // Interface.
-import { CollectionAdapter, CollectionShape } from '@typedly/collection';
+import { CollectionAdapter, CollectionShape, CollectionAdapterConstructor } from '@typedly/collection';
 // Type.
 import { AsyncReturn, IterValue } from '@typedly/data';
 /**
@@ -18,8 +18,8 @@ import { AsyncReturn, IterValue } from '@typedly/data';
 export abstract class CollectionBase<
   E,
   T,
-  R extends boolean,
-  A extends CollectionAdapter<E, T, R>
+  R extends boolean = false,
+  A extends CollectionAdapter<E, T, R> = CollectionAdapter<E, T, R>
 > extends AdapterData<T, E[], R, A>
   implements CollectionShape<E, T, R> {
   override get [Symbol.toStringTag](): string {
@@ -33,7 +33,7 @@ export abstract class CollectionBase<
   }
   constructor(
     async: R,
-    adapter: {new (...elements: E[]): A},
+    adapter: CollectionAdapterConstructor<E, T, R, A>,
     ...elements: E[]
   ) {
     super(
@@ -41,15 +41,16 @@ export abstract class CollectionBase<
       adapter,
       ...elements
     );
+    super.adapter?.setAsync?.(async);
   }
   public add(...element: E[]): AsyncReturn<R, this> {
-    return this.asyncReturn(this.adapter.add(...element));
+    return super.returnThis(this.adapter.add(...element));
   }
   public delete(...element: E[]): AsyncReturn<R, boolean> {
     return this.adapter.delete(...element);
   }
   public forEach(callbackfn: (element: E, element2: E, collection: CollectionShape<E, T, R>) => void, thisArg?: any): AsyncReturn<R, this> {
-    return this.asyncReturn(this.adapter.forEach(callbackfn as any, thisArg));
+    return super.returnThis(this.adapter.forEach(callbackfn as any, thisArg));
   }
   public has(...element: E[]): AsyncReturn<R, boolean> {
     return this.adapter.has(...element);
@@ -57,10 +58,8 @@ export abstract class CollectionBase<
   public override lock(): this {
     return this.adapter.lock?.(), this;
   }
-  protected asyncReturn(result: any): AsyncReturn<R, this> {
-    return (result instanceof Promise
-      ? result.then(() => this)
-      : this) as AsyncReturn<R, this>;
+  public toArray(): AsyncReturn<R, E[]> {
+    return this.adapter.toArray!();
   }
   override *[Symbol.iterator](): IterableIterator<E extends IterValue<T> ? E : IterValue<T>> {
     yield* this.adapter[Symbol.iterator]?.() as any;
