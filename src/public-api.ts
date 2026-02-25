@@ -3,8 +3,11 @@
  */
 export {
   CollectionBase,
+  ConfigurableCollectionBase,
 } from './core';
 
 export {
-  Collection
+  Collection,
+  ConfigurableCollection,
+  HybridCollection
 } from './lib';
