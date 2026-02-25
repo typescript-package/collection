@@ -1,11 +1,7 @@
 import { Collection } from "../lib";
 import { SetAdapter } from '@typescript-package/collection-adapter';
 
-const collection = new Collection({
-  async: false,
-  // Capture the `T` type.
-  value: new Set([3,'a']),
-},
+const collection = new Collection(
   SetAdapter,
   1, 2, '3' as string | number
 );
