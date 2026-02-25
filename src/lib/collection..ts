@@ -1,7 +1,7 @@
 // Abstract.
 import { CollectionBase } from '../core';
 // Interface.
-import { CollectionAdapter } from '@typedly/collection';
+import { CollectionAdapter, CollectionAdapterConstructor } from '@typedly/collection';
 /**
  * @description The collection concrete class with adapter support.
  * @export
@@ -13,19 +13,15 @@ import { CollectionAdapter } from '@typedly/collection';
  * @extends {CollectionBase<E, T, R, A>}
  */
 export class Collection<
-  T,
-  E,
-  R extends boolean = false,
-  A extends CollectionAdapter<E, T, R> = CollectionAdapter<E, T, R>
+  A extends CollectionAdapter<E, T, R> = CollectionAdapter<any, any, any>,
+  E = A extends CollectionAdapter<infer E, any, any> ? E : unknown,
+  T = A extends CollectionAdapter<E, infer T, any> ? T : unknown,
+  R extends boolean = A extends CollectionAdapter<E, any, infer R> ? R : false,
 > extends CollectionBase<E, T, R, A> {
   constructor(
-    {async, value}: {
-      async?: R,
-      value?: T,
-    },
-    adapter: {new (...elements: E[]): A},
+    adapter: CollectionAdapterConstructor<E, T, R, A>,
     ...elements: E[]
   ) {
-    super(async || false as R, adapter, ...elements);
+    super(false as R, adapter, ...elements);
   }
 }
