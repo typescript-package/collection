@@ -295,6 +295,14 @@ How do I know when to release 1.0.0?
 
 MIT © typescript-package ([license][typescript-package-license])
 
+## Related Packages
+
+- **[@typescript-package/collection-adapter](https://github.com/typescript-package/collection-adapter)**: A TypeScript library for collection adapters.
+- **[@typescript-package/data](https://github.com/typescript-package/data)**: A lightweight TypeScript library for basic data management.
+- **[@typescript-package/event-emitter](https://github.com/typescript-package/event-emitter)**: A lightweight TypeScript library for event emitter.
+- **[@typescript-package/listeners](https://github.com/typescript-package/listeners)**: A lightweight TypeScript library for event emitter.
+- **[@typescript-package/storage](https://github.com/typescript-package/storage)**: A lightweight TypeScript library for basic storage management.
+
 <!-- This package: typescript-package  -->
   <!-- GitHub: badges -->
   [typescript-package-badge-issues]: https://img.shields.io/github/issues/typescript-package/collection
