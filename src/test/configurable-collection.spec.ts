@@ -9,13 +9,15 @@ export class ConfigurableSetAdapter<
   T extends Set<E>,
   R
 > extends SetAdapter<E, T> {
+  configuration: C;
   constructor(settings: C, ...elements: E[]) {
     super(...elements);
+    this.configuration = settings;
   }
 }
 
 const collection = new ConfigurableCollection(
-  {async: false},
+  {async: false, capacity: 10 as number},
   ConfigurableSetAdapter,
   1, 2, '3' as string | number
 );
@@ -30,6 +32,11 @@ for (const element of collection) {
 }
 
 console.log(`size: `, collection.size); // Output: 4
+
+const capacityCollection = collection.with({async: false, capacity: 20});
+
+console.log(`capacityCollection.configuration: `, capacityCollection.configuration); // Output: { async: false, capacity: 20 }
+console.log(`collection.configuration: `, collection.configuration); // Output: { async: false, capacity: 10 }
 
 describe("HybridCollection SetAdapter", () => {
   test("has method works correctly", () => {
