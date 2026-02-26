@@ -1,31 +1,44 @@
-import { ConfigurableCollection } from "../lib";
+import { CollectionSettings } from "@typedly/collection";
 import { SetAdapter } from '@typescript-package/collection-adapter';
 
-// const collection = new ConfigurableCollection(
-//   {async: false},
-//   SetAdapter,
-//   1, 2, '3' as string | number
-// );
+import { ConfigurableCollection } from "../public-api";
 
-// // Adds.
-// collection.add(27, 29, 31);
-// // Deletes.
-// collection.delete(29, 31, 22);
+export class ConfigurableSetAdapter<
+  const C extends CollectionSettings<E, T, false>,
+  E,
+  T extends Set<E>,
+  R
+> extends SetAdapter<E, T> {
+  constructor(settings: C, ...elements: E[]) {
+    super(...elements);
+  }
+}
 
-// for (const element of collection) {
-//   console.log(`element: `, element);
-// }
+const collection = new ConfigurableCollection(
+  {async: false},
+  ConfigurableSetAdapter,
+  1, 2, '3' as string | number
+);
 
-// console.log(`size: `, collection.size); // Output: 4
+// Adds.
+collection.add(27, 29, 31);
+// Deletes.
+collection.delete(29, 31, 22);
 
-// describe("HybridCollection SetAdapter", () => {
-//   test("has method works correctly", () => {
-//     expect(collection.has(27)).toBe(true);
-//     expect(collection.has(29)).toBe(false);
-//   });
+for (const element of collection) {
+  console.log(`element: `, element);
+}
 
-//   test("clear method works correctly", () => {
-//     collection.clear();
-//     expect(collection.size).toBe(0);
-//   });
-// });
+console.log(`size: `, collection.size); // Output: 4
+
+describe("HybridCollection SetAdapter", () => {
+  test("has method works correctly", () => {
+    expect(collection.has(27)).toBe(true);
+    expect(collection.has(29)).toBe(false);
+  });
+
+  test("clear method works correctly", () => {
+    collection.clear();
+    expect(collection.size).toBe(0);
+  });
+});
