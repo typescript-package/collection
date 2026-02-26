@@ -116,7 +116,7 @@ for (const element of collection) {
 console.log(`size: `, collection.size); // Output: 4
 ```
 
-[`ConfigurableCollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/configurable.collection.ts)
+[`ConfigurableCollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/configurable-collection.base.ts)
 
 ### Concrete
 
