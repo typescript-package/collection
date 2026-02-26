@@ -241,6 +241,7 @@ Support via:
 - [GitHub](https://github.com/sponsors/angular-package/sponsorships?sponsor=sciborrudnicki&tier_id=83618)
 - [DonorBox](https://donorbox.org/become-a-sponsor-to-the-angular-package?default_interval=o)
 - [Patreon](https://www.patreon.com/checkout/angularpackage?rid=0&fan_landing=true&view_as=public)
+- [Ko-fi](https://ko-fi.com/sterblack)
 - [PayPal](https://paypal.me/sterblack)
 - [4Fund](https://4fund.com/bruubs)
 
