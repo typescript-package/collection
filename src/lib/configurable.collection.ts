@@ -20,9 +20,22 @@ export class ConfigurableCollection<
   T = C['value'] extends undefined | unknown ? A extends CollectionAdapter<any, infer T, any> ? T : unknown : C['value'],
   R extends boolean = C['async'] extends boolean ? C['async'] : A extends CollectionAdapter<E, any, infer R> ? R : false,
 > extends ConfigurableCollectionBase<E, T, R, C, A> {
+  /**
+   * @inheritdoc Override the `Symbol.toStringTag` to return 'ConfigurableCollection' for better debugging and identification of instances of this class.
+   * @readonly
+   * @type {string}
+   */
   override get [Symbol.toStringTag](): string {
     return 'ConfigurableCollection';
   }
+  
+  /**
+   * Creates an instance of `ConfigurableCollection`.
+   * @constructor
+   * @param {C} [settings={} as C] Settings for the collection, including async state and value type.
+   * @param {ConfigurableCollectionAdapterConstructor<E, T, C, A>} adapter The adapter constructor to create the collection's adapter.
+   * @param {...E[]} elements Initial elements to add to the collection.
+   */
   constructor(
     settings: C = {} as C,
     adapter: ConfigurableCollectionAdapterConstructor<E, T, C, A>,
@@ -30,6 +43,4 @@ export class ConfigurableCollection<
   ) {
     super(settings, adapter, ...elements);
   }
-
-
 }
