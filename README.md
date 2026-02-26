@@ -146,7 +146,7 @@ for (const element of collection) {
 console.log(`size: `, collection.size); // Output: 4
 ```
 
-[`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.class.ts)
+[`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.ts)
 
 ### `ConfigurableCollection`
 
