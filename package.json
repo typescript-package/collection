@@ -36,6 +36,26 @@
       "url": "https://donate.stripe.com/dR614hfDZcJE3wAcMM"
     },
     {
+      "type": "Donorbox",
+      "url": "https://donorbox.org/become-a-sponsor-to-the-angular-package?default_interval=o"
+    },
+    {
+      "type": "Open Collective",
+      "url": "https://opencollective.com/sterblack"
+    },
+    {
+      "type": "Ko-fi",
+      "url": "https://ko-fi.com/sterblack"
+    },
+    {
+      "type": "4Fund",
+      "url": "https://4fund.com/bruubs"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/sterblack"
+    },
+    {
       "type": "individual",
       "url": "https://checkout.revolut.com/pay/048b10a3-0e10-42c8-a917-e3e9cb4c8e29"
     }
