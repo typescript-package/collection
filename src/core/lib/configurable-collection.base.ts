@@ -2,7 +2,12 @@
 import { DataCore } from '@typescript-package/data';
 // Interface.
 import { AsyncReturn, IterValue } from '@typedly/data';
-import { CollectionAdapter, CollectionSettings, CollectionShape, ConfigurableCollectionAdapterConstructor } from '@typedly/collection';
+import {
+  CollectionAdapter,
+  CollectionSettings,
+  CollectionShape,
+  ConfigurableCollectionAdapterConstructor
+} from '@typedly/collection';
 /**
  * @description The core abstract class for configurable collections of elements `Element` type.
  * @export
@@ -111,6 +116,9 @@ export abstract class ConfigurableCollectionBase<
   }
   public toArray(): AsyncReturn<R, E[]> {
     return this.adapter.toArray!();
+  }
+  protected isIterable(val: unknown): val is Iterable<E> {
+    return val != null && typeof (val as any)[Symbol.iterator] === 'function';
   }
   protected returnThis(result: AsyncReturn<R, A> | this): AsyncReturn<R, this> {
     return (result instanceof Promise
