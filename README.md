@@ -21,8 +21,11 @@ A **lightweight** TypeScript package for data collection.
 - [Api](#api)
   - **Abstract**
     - [`CollectionBase`](#collectionbase)
+    - [`ConfigurableCollectionBase`](#configurablecollectionbase)
   - **Concrete**
     - [`Collection`](#collection)
+    - [`ConfigurableCollection`](#configurablecollection)
+    - [`HybridCollection`](#hybridcollection)
 - [Contributing](#contributing)
 - [Code of Conduct](code-of-conduct)
 - [Git](#git)
@@ -42,8 +45,11 @@ npm install @typescript-package/collection --save-peer
 import {
   // Abstract.
   CollectionBase,
+  ConfigurableCollectionBase,
   // Concrete.
   Collection,
+  ConfigurableCollection,
+  HybridCollection
 } from '@typescript-package/collection';
 ```
 
@@ -60,16 +66,57 @@ import { CollectionBase } from '@typescript-package/collection';
 #### Return types for collection methods
 
 | Method      | Returns `this` for chaining? | Uses `asyncReturn` helper? | Returns adapter result? |
-|-------------|:---------------------------:|:-------------------------:|:----------------------:|
-| `add`       |       ✓                     |        ✓                  |         ✗              |
-| `forEach`   |       ✓                     |        ✓                  |         ✗              |
-| `delete`    |       ✗                     |        ✓                  |         ✓              |
-| `has`       |       ✗                     |        ✓                  |         ✓              |
-| `lock`      |       ✓                     |        ✗                  |         ✗              |
+|-------------|:----------------------------:|:--------------------------:|:-----------------------:|
+| `add`       |       ✓                      |        ✓                   |         ✗               |
+| `forEach`   |       ✓                      |        ✓                   |         ✗               |
+| `delete`    |       ✗                      |        ✓                   |         ✓               |
+| `has`       |       ✗                      |        ✓                   |         ✓               |
+| `lock`      |       ✓                      |        ✗                   |         ✗               |
+| `toArray`   |       ✓                      |        ✓                   |         ✓               |
 
 All methods that can be asynchronous make use of the `asyncReturn` helper, which adapts return types to be synchronous (`this`) or asynchronous (`Promise<this>`) depending on the collection's mode (`R`).
 
 [`CollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/collection.base.ts)
+
+### `ConfigurableCollectionBase`
+
+The base functionality abstraction for collections.
+
+```typescript
+import { SetAdapter } from '@typescript-package/collection-adapter';
+import { ConfigurableCollection } from '@typescript-package/collection';
+
+export class ConfigurableSetAdapter<
+  const C extends CollectionSettings<E, T, false>,
+  E,
+  T extends Set<E>,
+  R
+> extends SetAdapter<E, T> {
+  constructor(settings: C, ...elements: E[]) {
+    super(...elements);
+  }
+}
+
+// Initialize.s
+const collection = new ConfigurableCollection(
+  {async: false},
+  ConfigurableSetAdapter,
+  1, 2, '3' as string | number
+);
+
+// Adds.
+collection.add(27, 29, 31);
+// Deletes.
+collection.delete(29, 31, 22);
+
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
+console.log(`size: `, collection.size); // Output: 4
+```
+
+[`ConfigurableCollectionBase`](https://github.com/typescript-package/collection/blob/main/src/core/lib/configurable.collection.ts)
 
 ### Concrete
 
@@ -81,12 +128,8 @@ The collection concrete class with adapter support.
 import { SetAdapter } from '@typescript-package/collection-adapter';
 import { Collection } from '@typescript-package/collection';
 
-// Initialize 
-const collection = new Collection({
-    async: false,
-    // Capture the `T` type.
-    value: new Set([3,'a']),
-  },
+// Initialize.
+const collection = new Collection(
   SetAdapter,
   1, 2, '3' as string | number
 );
@@ -101,10 +144,87 @@ for (const element of collection) {
 }
 
 console.log(`size: `, collection.size); // Output: 4
-
 ```
 
 [`Collection`](https://github.com/typescript-package/collection/blob/main/src/lib/collection.class.ts)
+
+### `ConfigurableCollection`
+
+The configurable collection concrete class with adapter support.
+
+```typescript
+import { ConfigurableCollection } from '@typescript-package/collection';
+import { CollectionSettings } from "@typedly/collection";
+import { SetAdapter } from '@typescript-package/collection-adapter';
+
+export class ConfigurableSetAdapter<
+  const C extends CollectionSettings<E, T, false>,
+  E,
+  T extends Set<E>,
+  R
+> extends SetAdapter<E, T> {
+  configuration: C;
+  constructor(settings: C, ...elements: E[]) {
+    super(...elements);
+    this.configuration = settings;
+  }
+}
+
+const collection = new ConfigurableCollection(
+  {async: false, capacity: 10 as number},
+  ConfigurableSetAdapter,
+  1, 2, '3' as string | number
+);
+
+// Adds.
+collection.add(27, 29, 31);
+// Deletes.
+collection.delete(29, 31, 22);
+
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
+console.log(`size: `, collection.size); // Output: 4
+
+const capacityCollection = collection.with({async: false, capacity: 20});
+
+console.log(`capacityCollection.configuration: `, capacityCollection.configuration); // Output: { async: false, capacity: 20 }
+console.log(`collection.configuration: `, collection.configuration); // Output: { async: false, capacity: 10 }
+```
+
+[`ConfigurableCollection`](https://github.com/typescript-package/collection/blob/main/src/lib/configurable.collection.ts)
+
+### `HybridCollection`
+
+The hybrid collection concrete class adapter support for switchable asynchronous state.
+
+```typescript
+import { HybridCollection } from '@typescript-package/collection';
+import { SetAdapter } from '@typescript-package/collection-adapter';
+
+// Initialize.
+const collection = new HybridCollection(
+  false as boolean,
+  SetAdapter,
+  1, 2, '3' as string | number
+);
+
+// Adds.
+collection.add(27, 29, 31);
+// Deletes.
+collection.delete(29, 31, 22);
+
+for (const element of collection) {
+  console.log(`element: `, element);
+}
+
+// For proper hybrid collection, we can switch to async mode and perform async operations.
+const asyncCollection = collection.with(true)
+asyncCollection.add(42, 43, 44);
+```
+
+[`HybridCollection`](https://github.com/typescript-package/collection/blob/main/src/lib/hybrid.collection.ts)
 
 ## Contributing
 
@@ -117,10 +237,12 @@ If you find this package useful and would like to support its and general develo
 Support via:
 
 - [Stripe](https://donate.stripe.com/dR614hfDZcJE3wAcMM)
-- [Revolut](https://checkout.revolut.com/pay/048b10a3-0e10-42c8-a917-e3e9cb4c8e29)
+- ~~[Revolut](https://checkout.revolut.com/pay/048b10a3-0e10-42c8-a917-e3e9cb4c8e29)~~
 - [GitHub](https://github.com/sponsors/angular-package/sponsorships?sponsor=sciborrudnicki&tier_id=83618)
 - [DonorBox](https://donorbox.org/become-a-sponsor-to-the-angular-package?default_interval=o)
 - [Patreon](https://www.patreon.com/checkout/angularpackage?rid=0&fan_landing=true&view_as=public)
+- [PayPal](https://paypal.me/sterblack)
+- [4Fund](https://4fund.com/bruubs)
 
 or via Trust Wallet
 
