@@ -61,6 +61,9 @@ export abstract class CollectionBase<
   public toArray(): AsyncReturn<R, E[]> {
     return this.adapter.toArray!();
   }
+  protected isIterable(val: unknown): val is Iterable<E> {
+    return val != null && typeof (val as any)[Symbol.iterator] === 'function';
+  }
   override *[Symbol.iterator](): IterableIterator<E extends IterValue<T> ? E : IterValue<T>> {
     yield* this.adapter[Symbol.iterator]?.() as any;
   }
