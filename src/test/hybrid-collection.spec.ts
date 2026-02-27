@@ -1,33 +1,64 @@
 import { HybridCollection } from "../lib";
-import { SetAdapter } from '@typescript-package/collection-adapter';
+import { HybridSetAdapter } from "./hybrid-set.adapter";
 
-const collection = new HybridCollection(
+const hybridCollection = new HybridCollection(
   false as boolean,
-  SetAdapter,
+  HybridSetAdapter,
   1, 2, '3' as string | number
 );
 
-// Adds.
-collection.add(27, 29, 31);
-// Deletes.
-collection.delete(29, 31, 22);
 
-for (const element of collection) {
+console.log(hybridCollection.async, hybridCollection.adapter.async);
+
+// Adds.
+hybridCollection.add(27, 29, 31);
+// Deletes.
+hybridCollection.delete(29, 31, 22);
+
+for (const element of hybridCollection) {
   console.log(`element: `, element);
 }
 
 // For proper hybrid collection, we can switch to async mode and perform async operations.
-const asyncCollection = collection.with(true);
+const asyncCollection = hybridCollection.with(true);
 asyncCollection.add(42, 43, 44);
 
-describe("HybridCollection SetAdapter", () => {
+describe("Synchronous HybridCollection with HybridSetAdapter", () => {
+  let hybridCollection = new HybridCollection(
+    false,
+    HybridSetAdapter,
+    1, 2, '3' as string | number
+  );
+  beforeEach(() => {
+    hybridCollection.clear();
+  });
   test("has method works correctly", () => {
-    expect(collection.has(27)).toBe(true);
-    expect(collection.has(29)).toBe(false);
+    expect(hybridCollection.async).toEqual(false);
+    expect(hybridCollection.async).toBe(hybridCollection.adapter.async);
   });
 
   test("clear method works correctly", () => {
-    collection.clear();
-    expect(collection.size).toBe(0);
+    hybridCollection.clear();
+    expect(hybridCollection.size).toBe(0);
+  });
+});
+
+describe("Asynchronous HybridCollection with HybridSetAdapter", () => {
+  let hybridCollection = new HybridCollection(
+    true,
+    HybridSetAdapter,
+    1, 2, '3' as string | number
+  );
+  beforeEach(() => {
+    hybridCollection.clear();
+  });
+  test("has method works correctly", () => {
+    expect(hybridCollection.async).toEqual(true);
+    expect(hybridCollection.async).toBe(hybridCollection.adapter.async);
+  });
+
+  test("clear method works correctly", () => {
+    hybridCollection.clear();
+    expect(hybridCollection.size).toBe(0);
   });
 });
