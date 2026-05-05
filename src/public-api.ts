@@ -2,12 +2,8 @@
  * Public API Surface of collection
  */
 export {
-  CollectionBase,
-  ConfigurableCollectionBase,
-} from './core';
-
-export {
+  // Abstract
+  CollectionCore,
+  // Concrete
   Collection,
-  ConfigurableCollection,
-  HybridCollection
 } from './lib';
