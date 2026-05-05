@@ -9,8 +9,10 @@
     "registry": "https://registry.npmjs.org"
   },
   "peerDependencies": {
-    "@typedly/collection": "^5.0.0",
-    "@typescript-package/data": "^8.0.0"
+    "@typedly/collection": "^7.0.0",
+    "@typedly/data": "^6.2.0",
+    "@typedly/data-traits": "^2.0.0",
+    "@typescript-package/data": "^9.0.0-beta.2"
   },
   "scripts": {
     "prepublishOnly": "npm run pkg && npm run clean",
